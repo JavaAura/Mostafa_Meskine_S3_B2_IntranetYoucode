@@ -2,9 +2,12 @@ package com.example.IntranetYoucode.Services;
 
 import com.example.IntranetYoucode.Entities.Classroom;
 import com.example.IntranetYoucode.Entities.DTO.ClassroomDTO;
+import com.example.IntranetYoucode.Exceptions.EntityNotFoundException;
+import com.example.IntranetYoucode.Exceptions.InvalidEntityException;
 import com.example.IntranetYoucode.Repositories.ClassroomRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -21,14 +24,21 @@ public class ClassroomService {
                 .collect(Collectors.toList());
     }
 
-    public Optional<ClassroomDTO> getClassroomById(Long id) {
-        return classroomRepository.findById(id).map(this::convertToDTO);
+    public ClassroomDTO getClassroomById(Long id) {
+        return classroomRepository.findById(id)
+                .map(this::convertToDTO)
+                .orElseThrow(() -> new EntityNotFoundException("Classroom", id));
     }
 
     public ClassroomDTO createClassroom(ClassroomDTO classroomDTO) {
+        if (classroomDTO.getName() == null || classroomDTO.getNumRoom() == null) {
+            throw new InvalidEntityException("Classroom", "Name and Room Number cannot be null");
+        }
+
         Classroom newClassroom = new Classroom();
         newClassroom.setName(classroomDTO.getName());
         newClassroom.setNumRoom(classroomDTO.getNumRoom());
+
         return convertToDTO(classroomRepository.save(newClassroom));
     }
 
@@ -39,10 +49,13 @@ public class ClassroomService {
                     classroomEntity.setNumRoom(classroomDetails.getNumRoom());
                     return convertToDTO(classroomRepository.save(classroomEntity));
                 })
-                .orElseThrow(() -> new RuntimeException("Classroom not found with id " + id));
+                .orElseThrow(() -> new EntityNotFoundException("Classroom", id));
     }
 
     public void deleteClassroom(Long id) {
+        if (!classroomRepository.existsById(id)) {
+            throw new EntityNotFoundException("Classroom", id);
+        }
         classroomRepository.deleteById(id);
     }
 
@@ -50,4 +63,3 @@ public class ClassroomService {
         return new ClassroomDTO(classroomEntity.getId(), classroomEntity.getName(), classroomEntity.getNumRoom());
     }
 }
-
