@@ -4,12 +4,12 @@ import com.example.IntranetYoucode.Entities.DTO.ClassroomDTO;
 import com.example.IntranetYoucode.Services.ClassroomService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/classrooms")
 public class ClassroomController {
-
     private final ClassroomService classroomService;
 
     @Autowired
@@ -35,7 +35,8 @@ public class ClassroomController {
 
     @PutMapping("/{id}")
     public ClassroomDTO updateClassroom(@PathVariable Long id, @RequestBody ClassroomDTO classroomDetails) {
-        return classroomService.updateClassroom(id, classroomDetails);
+        return classroomService.updateClassroom(id, classroomDetails)
+                .orElse(null);  // Return null if classroom not found
     }
 
     @DeleteMapping("/{id}")
@@ -43,4 +44,3 @@ public class ClassroomController {
         classroomService.deleteClassroom(id);
     }
 }
-

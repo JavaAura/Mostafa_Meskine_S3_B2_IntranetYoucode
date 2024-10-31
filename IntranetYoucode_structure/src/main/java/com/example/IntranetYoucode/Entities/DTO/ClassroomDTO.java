@@ -11,5 +11,5 @@ public class ClassroomDTO {
 
     private Long id;
     private String name;
-    private Integer numRoom;
+    private Integer roomNumber;
 }

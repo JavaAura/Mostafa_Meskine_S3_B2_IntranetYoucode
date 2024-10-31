@@ -15,7 +15,6 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class ClassroomService {
-
     private final ClassroomRepository classroomRepository;
 
     public List<ClassroomDTO> getAllClassrooms() {
@@ -24,32 +23,25 @@ public class ClassroomService {
                 .collect(Collectors.toList());
     }
 
-    public ClassroomDTO getClassroomById(Long id) {
+    public Optional<ClassroomDTO> getClassroomById(Long id) {
         return classroomRepository.findById(id)
-                .map(this::convertToDTO)
-                .orElseThrow(() -> new EntityNotFoundException("Classroom", id));
+                .map(this::convertToDTO);
     }
 
     public ClassroomDTO createClassroom(ClassroomDTO classroomDTO) {
-        if (classroomDTO.getName() == null || classroomDTO.getNumRoom() == null) {
+        if (classroomDTO.getName() == null || classroomDTO.getRoomNumber() == null) {
             throw new InvalidEntityException("Classroom", "Name and Room Number cannot be null");
         }
-
-        Classroom newClassroom = new Classroom();
-        newClassroom.setName(classroomDTO.getName());
-        newClassroom.setNumRoom(classroomDTO.getNumRoom());
-
-        return convertToDTO(classroomRepository.save(newClassroom));
+        return convertToDTO(classroomRepository.save(createClassroomEntity(classroomDTO)));
     }
 
-    public ClassroomDTO updateClassroom(Long id, ClassroomDTO classroomDetails) {
+    public Optional<ClassroomDTO> updateClassroom(Long id, ClassroomDTO classroomDetails) {
         return classroomRepository.findById(id)
                 .map(classroomEntity -> {
                     classroomEntity.setName(classroomDetails.getName());
-                    classroomEntity.setNumRoom(classroomDetails.getNumRoom());
+                    classroomEntity.setRoomNumber(classroomDetails.getRoomNumber());
                     return convertToDTO(classroomRepository.save(classroomEntity));
-                })
-                .orElseThrow(() -> new EntityNotFoundException("Classroom", id));
+                });
     }
 
     public void deleteClassroom(Long id) {
@@ -59,7 +51,11 @@ public class ClassroomService {
         classroomRepository.deleteById(id);
     }
 
+    private Classroom createClassroomEntity(ClassroomDTO classroomDTO) {
+        return new Classroom(null, classroomDTO.getName(), classroomDTO.getRoomNumber(), null);
+    }
+
     private ClassroomDTO convertToDTO(Classroom classroomEntity) {
-        return new ClassroomDTO(classroomEntity.getId(), classroomEntity.getName(), classroomEntity.getNumRoom());
+        return new ClassroomDTO(classroomEntity.getId(), classroomEntity.getName(), classroomEntity.getRoomNumber());
     }
 }

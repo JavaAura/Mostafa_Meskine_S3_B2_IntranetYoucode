@@ -5,6 +5,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
+import javax.validation.constraints.NotBlank;
 
 @Entity
 @DiscriminatorValue("INSTRUCTOR")
@@ -12,6 +13,6 @@ import javax.persistence.Entity;
 @NoArgsConstructor
 public class Instructor extends User {
 
+    @NotBlank(message = "Specialty cannot be blank")
     private String specialty;
-
 }
