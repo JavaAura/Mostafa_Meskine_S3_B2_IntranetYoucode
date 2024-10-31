@@ -24,8 +24,7 @@ public class ClassroomController {
 
     @GetMapping("/{id}")
     public ClassroomDTO getClassroomById(@PathVariable Long id) {
-        return classroomService.getClassroomById(id)
-                .orElse(null);  // Return null if classroom not found
+        return classroomService.getClassroomById(id);
     }
 
     @PostMapping

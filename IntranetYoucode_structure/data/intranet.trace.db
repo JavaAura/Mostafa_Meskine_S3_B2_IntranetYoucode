@@ -362,3 +362,63 @@ org.h2.jdbc.JdbcSQLSyntaxErrorException: Constraint "FK4VJI2F438RGB1N08B8JESR3PB
 	at org.apache.maven.surefire.booter.ForkedBooter.runSuitesInProcess(ForkedBooter.java:345)
 	at org.apache.maven.surefire.booter.ForkedBooter.execute(ForkedBooter.java:126)
 	at org.apache.maven.surefire.booter.ForkedBooter.main(ForkedBooter.java:418)
+2024-10-31 15:50:17 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "USERS" not found; SQL statement:
+
+    alter table users 
+       drop constraint FKrc1x3lrr72dsn1mqp2r [42102-214]
+2024-10-31 15:50:17 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "USERS" not found; SQL statement:
+
+    alter table users 
+       drop constraint FK4vji2f438rgb1n08b8j [42102-214]
+2024-10-31 15:56:33 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "USERS" not found; SQL statement:
+
+    alter table users 
+       drop constraint FKrc1x3lrr72dsn1mqp2r [42102-214]
+2024-10-31 15:56:33 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "USERS" not found; SQL statement:
+
+    alter table users 
+       drop constraint FK4vji2f438rgb1n08b8j [42102-214]
+2024-10-31 16:04:09 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "USERS" not found; SQL statement:
+
+    alter table users 
+       drop constraint FKrc1x3lrr72dsn1mqp2r [42102-214]
+2024-10-31 16:04:09 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "USERS" not found; SQL statement:
+
+    alter table users 
+       drop constraint FK4vji2f438rgb1n08b8j [42102-214]
+2024-10-31 16:04:36 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "USERS" not found; SQL statement:
+
+    alter table users 
+       drop constraint FKrc1x3lrr72dsn1mqp2r [42102-214]
+2024-10-31 16:04:36 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "USERS" not found; SQL statement:
+
+    alter table users 
+       drop constraint FK4vji2f438rgb1n08b8j [42102-214]
+2024-10-31 16:04:38 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "USERS" not found; SQL statement:
+
+    alter table users 
+       drop constraint FKrc1x3lrr72dsn1mqp2r [42102-214]
+2024-10-31 16:04:38 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "USERS" not found; SQL statement:
+
+    alter table users 
+       drop constraint FK4vji2f438rgb1n08b8j [42102-214]
+2024-10-31 16:07:40 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "USERS" not found; SQL statement:
+
+    alter table users 
+       drop constraint FKrc1x3lrr72dsn1mqp2r [42102-214]
+2024-10-31 16:07:40 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "USERS" not found; SQL statement:
+
+    alter table users 
+       drop constraint FK4vji2f438rgb1n08b8j [42102-214]
