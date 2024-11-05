@@ -1,6 +1,7 @@
 package com.example.IntranetYoucode.Entities;
 
 import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.DiscriminatorValue;
@@ -9,6 +10,7 @@ import javax.validation.constraints.NotBlank;
 
 @Entity
 @DiscriminatorValue("LEARNER")
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class Learner extends User {

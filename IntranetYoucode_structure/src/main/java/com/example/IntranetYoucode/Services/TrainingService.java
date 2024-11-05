@@ -6,6 +6,7 @@ import com.example.IntranetYoucode.Exceptions.EntityNotFoundException;
 import com.example.IntranetYoucode.Exceptions.InvalidEntityException;
 import com.example.IntranetYoucode.Repositories.TrainingRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
@@ -20,6 +21,8 @@ import java.util.stream.Collectors;
 public class TrainingService {
 
     private final TrainingRepository trainingRepository;
+    private final ObjectProvider<Training> trainingProvider;
+    private final ObjectProvider<TrainingDTO> trainingDTOProvider;
 
     public List<TrainingDTO> getAllTrainings() {
         return trainingRepository.findAll().stream()
@@ -33,11 +36,18 @@ public class TrainingService {
                 .orElseThrow(() -> new EntityNotFoundException("Training", id));
     }
 
+    // New method to get the Training entity directly
+    public Training getTrainingEntityById(Long id) {
+        return trainingRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Training", id));
+    }
+
     public TrainingDTO createTraining(@Valid TrainingDTO trainingDTO) {
         if (trainingDTO.getTitle() == null || trainingDTO.getLevel() == null) {
             throw new InvalidEntityException("Training", "Title and Level cannot be null");
         }
-        return convertToDTO(trainingRepository.save(createTrainingEntity(trainingDTO)));
+        Training trainingEntity = createTrainingEntity(trainingDTO);
+        return convertToDTO(trainingRepository.save(trainingEntity));
     }
 
     public Optional<TrainingDTO> updateTraining(Long id, @Valid TrainingDTO trainingDetails) {
@@ -63,31 +73,29 @@ public class TrainingService {
     }
 
     private Training createTrainingEntity(TrainingDTO trainingDTO) {
-        return new Training(
-                null,
-                trainingDTO.getTitle(),
-                trainingDTO.getLevel(),
-                trainingDTO.getPrerequisites(),
-                trainingDTO.getMinCapacity(),
-                trainingDTO.getMaxCapacity(),
-                trainingDTO.getStartDate(),
-                trainingDTO.getEndDate(),
-                trainingDTO.getStatus(),
-                null
-        );
+        Training training = trainingProvider.getObject();
+        training.setTitle(trainingDTO.getTitle());
+        training.setLevel(trainingDTO.getLevel());
+        training.setPrerequisites(trainingDTO.getPrerequisites());
+        training.setMinCapacity(trainingDTO.getMinCapacity());
+        training.setMaxCapacity(trainingDTO.getMaxCapacity());
+        training.setStartDate(trainingDTO.getStartDate());
+        training.setEndDate(trainingDTO.getEndDate());
+        training.setStatus(trainingDTO.getStatus());
+        return training;
     }
 
     private TrainingDTO convertToDTO(Training trainingEntity) {
-        return new TrainingDTO(
-                trainingEntity.getId(),
-                trainingEntity.getTitle(),
-                trainingEntity.getLevel(),
-                trainingEntity.getPrerequisites(),
-                trainingEntity.getMinCapacity(),
-                trainingEntity.getMaxCapacity(),
-                trainingEntity.getStartDate(),
-                trainingEntity.getEndDate(),
-                trainingEntity.getStatus()
-        );
+        TrainingDTO trainingDTO = trainingDTOProvider.getObject();
+        trainingDTO.setId(trainingEntity.getId());
+        trainingDTO.setTitle(trainingEntity.getTitle());
+        trainingDTO.setLevel(trainingEntity.getLevel());
+        trainingDTO.setPrerequisites(trainingEntity.getPrerequisites());
+        trainingDTO.setMinCapacity(trainingEntity.getMinCapacity());
+        trainingDTO.setMaxCapacity(trainingEntity.getMaxCapacity());
+        trainingDTO.setStartDate(trainingEntity.getStartDate());
+        trainingDTO.setEndDate(trainingEntity.getEndDate());
+        trainingDTO.setStatus(trainingEntity.getStatus());
+        return trainingDTO;
     }
 }

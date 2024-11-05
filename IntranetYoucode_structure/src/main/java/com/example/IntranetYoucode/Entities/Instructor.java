@@ -1,6 +1,7 @@
 package com.example.IntranetYoucode.Entities;
 
 import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.DiscriminatorValue;
@@ -11,6 +12,7 @@ import javax.validation.constraints.NotBlank;
 @DiscriminatorValue("INSTRUCTOR")
 @AllArgsConstructor
 @NoArgsConstructor
+@Data
 public class Instructor extends User {
 
     @NotBlank(message = "Specialty cannot be blank")

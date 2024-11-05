@@ -6,6 +6,7 @@ import com.example.IntranetYoucode.Exceptions.EntityNotFoundException;
 import com.example.IntranetYoucode.Exceptions.InvalidEntityException;
 import com.example.IntranetYoucode.Repositories.ClassroomRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
@@ -19,6 +20,8 @@ import java.util.stream.Collectors;
 @Validated
 public class ClassroomService {
     private final ClassroomRepository classroomRepository;
+    private final ObjectProvider<Classroom> classroomProvider;
+    private final ObjectProvider<ClassroomDTO> classroomDTOProvider;
 
     public List<ClassroomDTO> getAllClassrooms() {
         return classroomRepository.findAll().stream()
@@ -36,7 +39,13 @@ public class ClassroomService {
         if (classroomDTO.getName() == null || classroomDTO.getRoomNumber() == null) {
             throw new InvalidEntityException("Classroom", "Name and Room Number cannot be null");
         }
-        return convertToDTO(classroomRepository.save(createClassroomEntity(classroomDTO)));
+
+        if (classroomRepository.findByName(classroomDTO.getName()).isPresent()) {
+            throw new InvalidEntityException("Classroom", "Classroom with this name already exists");
+        }
+
+        Classroom classroomEntity = createClassroomEntity(classroomDTO);
+        return convertToDTO(classroomRepository.save(classroomEntity));
     }
 
     public Optional<ClassroomDTO> updateClassroom(Long id, @Valid ClassroomDTO classroomDetails) {
@@ -55,11 +64,24 @@ public class ClassroomService {
         classroomRepository.deleteById(id);
     }
 
+    public Classroom getClassroomEntityById(Long id) {
+        return classroomRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Classroom", id));
+    }
+
     private Classroom createClassroomEntity(ClassroomDTO classroomDTO) {
-        return new Classroom(null, classroomDTO.getName(), classroomDTO.getRoomNumber(), null);
+        Classroom classroom = classroomProvider.getObject();
+        classroom.setName(classroomDTO.getName());
+        classroom.setRoomNumber(classroomDTO.getRoomNumber());
+        // Additional fields can be set here if necessary
+        return classroom;
     }
 
     private ClassroomDTO convertToDTO(Classroom classroomEntity) {
-        return new ClassroomDTO(classroomEntity.getId(), classroomEntity.getName(), classroomEntity.getRoomNumber());
+        ClassroomDTO classroomDTO = classroomDTOProvider.getObject();
+        classroomDTO.setId(classroomEntity.getId());
+        classroomDTO.setName(classroomEntity.getName());
+        classroomDTO.setRoomNumber(classroomEntity.getRoomNumber());
+        return classroomDTO;
     }
 }
